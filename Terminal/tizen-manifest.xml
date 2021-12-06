@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest package="org.tizen.example.Terminal" version="1.0.0" api-version="4" xmlns="http://tizen.org/ns/packages">
+    <profile name="wearable" />
+    <watch-application appid="org.tizen.example.Terminal" exec="Terminal.dll" type="dotnet" ambient-support="false">
+        <label>Terminal</label>
+        <icon>Terminal.png</icon>
+        <metadata key="http://tizen.org/metadata/prefer_dotnet_aot" value="true" />
+        <splash-screens />
+    </watch-application>
+    <shortcut-list />
+    <privileges>
+        <privilege>http://tizen.org/privilege/location</privilege>
+    </privileges>
+    <dependencies />
+    <provides-appdefined-privileges />
+    <feature name="http://tizen.org/feature/location">true</feature>
+    <feature name="http://tizen.org/feature/battery">true</feature>
+</manifest>
