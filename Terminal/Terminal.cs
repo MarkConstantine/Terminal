@@ -1,3 +1,4 @@
+using System;
 using Terminal.Views;
 using Terminal.ViewModels;
 using Tizen.Applications;
@@ -40,18 +41,19 @@ namespace Terminal
         protected override void OnAmbientChanged(AmbientEventArgs mode)
         {
             base.OnAmbientChanged(mode);
+            _viewModel.AmbientModeEnabled = mode.Enabled;
         }
 
         protected override void OnAmbientTick(TimeEventArgs time)
         {
             base.OnAmbientTick(time);
+            _viewModel.Time = time.Time.UtcTimestamp + TimeSpan.FromMilliseconds(time.Time.Millisecond);
         }
 
         protected override void OnTerminate()
         {
             base.OnTerminate();
         }
-
 
         static void Main(string[] args)
         {

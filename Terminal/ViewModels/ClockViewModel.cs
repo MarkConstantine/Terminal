@@ -6,6 +6,7 @@ namespace Terminal.ViewModels
     {
         private DateTime _time;
         private int _battery = 100;
+        private bool _ambientModeEnabled = false;
 
         public DateTime Time
         {
@@ -15,7 +16,13 @@ namespace Terminal.ViewModels
                 if (_time == value) return;
                 _time = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(WatchTime));
             }
+        }
+
+        public string WatchTime
+        {
+            get => _time.ToString(AmbientModeEnabled ? "hh\\:mm" : "hh\\:mm\\:ss");
         }
 
         public int Battery
@@ -25,6 +32,17 @@ namespace Terminal.ViewModels
             {
                 if (_battery == value) return;
                 _battery = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool AmbientModeEnabled
+        {
+            get => _ambientModeEnabled;
+            set
+            {
+                if (_ambientModeEnabled == value) return;
+                _ambientModeEnabled = value;
                 OnPropertyChanged();
             }
         }

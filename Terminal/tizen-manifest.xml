@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest package="org.tizen.example.Terminal" version="1.0.0" api-version="4" xmlns="http://tizen.org/ns/packages">
+    <author email="MarkConstantConstantine@gmail.com">Mark Constantine</author>
     <profile name="wearable" />
-    <watch-application appid="org.tizen.example.Terminal" exec="Terminal.dll" type="dotnet" ambient-support="false">
+    <watch-application appid="org.tizen.example.Terminal" exec="Terminal.dll" type="dotnet" ambient-support="true">
         <label>Terminal</label>
         <icon>Terminal.png</icon>
         <metadata key="http://tizen.org/metadata/prefer_dotnet_aot" value="true" />

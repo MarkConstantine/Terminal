@@ -16,7 +16,7 @@
                 <Label x:Name="TopLabel"
                        Text="C:\>watch" />
                 <Label x:Name="TimeLabel"
-                       Text="{Binding Time, StringFormat='time     : {0:hh\\:mm\\:ss}'}" />
+                       Text="{Binding WatchTime, StringFormat='time     : {0}'}" />
                 <Label x:Name="DateLabel"
                        Text="{Binding Time, StringFormat='date     : {0:d}'}" />
                 <Label x:Name="DayLabel"
