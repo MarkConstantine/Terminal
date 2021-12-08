@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Terminal.TextWatchApplication">
+             x:Class="Terminal.Views.WatchView">
     <Application.Resources>
         <Style TargetType="Label">
             <Setter Property="FontFamily"
@@ -21,15 +21,8 @@
                        Text="{Binding Time, StringFormat='date     : {0:d}'}" />
                 <Label x:Name="DayLabel"
                        Text="{Binding Time, StringFormat='day      : {0:dddd}'}" />
-                <Label x:Name="StepsLabel"
-                       Padding="0, 0, 0, 0"
-                       Text="{Binding Steps, StringFormat='steps    : {0}'}" />
                 <Label x:Name="BatteryLabel"
                        Text="{Binding Battery, StringFormat='battery  : {0}%'}" />
-                <Label x:Name="WeatherLabel"
-                       Text="{Binding Weather, StringFormat='weather  : {0}'}" />
-                <Label x:Name="LocationLabel"
-                       Text="{Binding Location, StringFormat='location : {0}'}" />
             </StackLayout>
         </ContentPage>
     </Application.MainPage>

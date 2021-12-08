@@ -10,6 +10,7 @@
     <shortcut-list />
     <privileges>
         <privilege>http://tizen.org/privilege/location</privilege>
+        <privilege>http://tizen.org/privilege/alarm.set</privilege>
     </privileges>
     <dependencies />
     <provides-appdefined-privileges />
