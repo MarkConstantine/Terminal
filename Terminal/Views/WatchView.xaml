@@ -7,7 +7,7 @@
             <Setter Property="FontFamily"
                     Value="ClassicConsoleNeue" />
             <Setter Property="FontSize"
-                    Value="Micro" />
+                    Value="9" />
         </Style>
     </Application.Resources>
     <Application.MainPage>
