@@ -23,6 +23,8 @@
                        Text="{Binding Time, StringFormat='day      : {0:dddd}'}" />
                 <Label x:Name="BatteryLabel"
                        Text="{Binding Battery, StringFormat='battery  : {0}%'}" />
+                <Label x:Name="StepsLabel"
+                       Text="{Binding Steps, StringFormat='steps    : {0}'}" />
             </StackLayout>
         </ContentPage>
     </Application.MainPage>

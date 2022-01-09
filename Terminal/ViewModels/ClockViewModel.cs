@@ -1,4 +1,6 @@
 using System;
+using Terminal.Models;
+using Terminal.Services;
 
 namespace Terminal.ViewModels
 {
@@ -7,6 +9,13 @@ namespace Terminal.ViewModels
         private DateTime _time;
         private int _battery = 100;
         private bool _ambientModeEnabled = false;
+        private int _steps = 0;
+
+        public ClockViewModel()
+        {
+            PedometerService service = PedometerService.Instance;
+            service.PedometerUpdated += Service_PedometerUpdated;
+        }
 
         public DateTime Time
         {
@@ -45,6 +54,22 @@ namespace Terminal.ViewModels
                 _ambientModeEnabled = value;
                 OnPropertyChanged();
             }
+        }
+
+        public int Steps
+        {
+            get => _steps;
+            set
+            {
+                if (_steps == value) return;
+                _steps = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void Service_PedometerUpdated(object sender, PedometerUpdatedEventArgs e)
+        {
+            Steps = e.Steps;
         }
     }
 }

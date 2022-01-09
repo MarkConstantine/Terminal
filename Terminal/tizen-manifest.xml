@@ -12,6 +12,7 @@
     <privileges>
         <privilege>http://tizen.org/privilege/location</privilege>
         <privilege>http://tizen.org/privilege/alarm.set</privilege>
+        <privilege>http://tizen.org/privilege/healthinfo</privilege>
     </privileges>
     <dependencies />
     <provides-appdefined-privileges />

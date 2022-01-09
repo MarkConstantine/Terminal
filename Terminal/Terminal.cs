@@ -1,4 +1,5 @@
 using System;
+using Terminal.Services;
 using Terminal.Views;
 using Terminal.ViewModels;
 using Tizen.Applications;
@@ -20,12 +21,17 @@ namespace Terminal
 
             ElmSharp.Utility.AppendGlobalFontPath(DirectoryInfo.Resource);
 
-            _viewModel = new ClockViewModel();
-            _watchView = new WatchView
+            PrivilegeManager privilegeManager = PrivilegeManager.Instance;
+
+            if (!privilegeManager.AllPermissionsGranted())
             {
-                BindingContext = _viewModel
-            };
-            LoadWatchface(_watchView);
+                privilegeManager.PrivilegesChecked += OnPrivilegesChecked;
+                privilegeManager.CheckAllPrivileges();
+            }
+            else
+            {
+                Load();
+            }
         }
 
         protected override void OnTick(TimeEventArgs time)
@@ -52,10 +58,36 @@ namespace Terminal
 
         protected override void OnTerminate()
         {
+            AppTerminatedService service = AppTerminatedService.Instance;
+            service.Terminate();
             base.OnTerminate();
         }
 
-        static void Main(string[] args)
+        private void Load()
+        {
+            _viewModel = new ClockViewModel();
+            _watchView = new WatchView
+            {
+                BindingContext = _viewModel
+            };
+            LoadWatchface(_watchView);
+        }
+
+        private void OnPrivilegesChecked(object sender, EventArgs args)
+        {
+            PrivilegeManager privilegeManager = PrivilegeManager.Instance;
+            if (privilegeManager.AllPermissionsGranted())
+            {
+                privilegeManager.PrivilegesChecked -= OnPrivilegesChecked;
+                Load();
+            }
+            else
+            {
+                Current.Exit();
+            }
+        }
+
+        public static void Main(string[] args)
         {
             var app = new Program();
             Forms.Init(app);
