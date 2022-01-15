@@ -9,7 +9,8 @@ namespace Terminal.ViewModels
         private DateTime _time;
         private int _battery = 100;
         private bool _ambientModeEnabled = false;
-        private int _steps = 0;
+        private int _totalSteps = 0;
+        private int _totalStepsAtMidnight = 0;
 
         public ClockViewModel()
         {
@@ -24,6 +25,10 @@ namespace Terminal.ViewModels
             {
                 if (_time == value) return;
                 _time = value;
+                if (AtMidnight(_time.TimeOfDay))
+                {
+                    _totalStepsAtMidnight = _totalSteps;
+                }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(WatchTime));
             }
@@ -58,11 +63,11 @@ namespace Terminal.ViewModels
 
         public int Steps
         {
-            get => _steps;
+            get => _totalSteps - _totalStepsAtMidnight;
             set
             {
-                if (_steps == value) return;
-                _steps = value;
+                if (_totalSteps == value) return;
+                _totalSteps = value;
                 OnPropertyChanged();
             }
         }
@@ -70,6 +75,13 @@ namespace Terminal.ViewModels
         private void Service_PedometerUpdated(object sender, PedometerUpdatedEventArgs e)
         {
             Steps = e.Steps;
+        }
+
+        private bool AtMidnight(TimeSpan timeOfDay)
+        {
+            var midnight = DateTime.Today.TimeOfDay;
+            var diff = timeOfDay - midnight;
+            return TimeSpan.Zero < diff && diff < TimeSpan.FromSeconds(2);
         }
     }
 }
