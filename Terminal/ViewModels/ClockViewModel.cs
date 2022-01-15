@@ -36,7 +36,7 @@ namespace Terminal.ViewModels
 
         public string WatchTime
         {
-            get => _time.ToString(AmbientModeEnabled ? "hh\\:mm" : "hh\\:mm\\:ss");
+            get => _time.ToString(AmbientModeEnabled ? "hh\\:mm tt" : "hh\\:mm\\:ss tt");
         }
 
         public int Battery
