@@ -28,6 +28,7 @@ namespace Terminal.ViewModels
                 if (AtMidnight(_time.TimeOfDay))
                 {
                     _totalStepsAtMidnight = _totalSteps;
+                    OnPropertyChanged(nameof(Steps));
                 }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(WatchTime));
@@ -81,7 +82,7 @@ namespace Terminal.ViewModels
         {
             var midnight = DateTime.Today.TimeOfDay;
             var diff = timeOfDay - midnight;
-            return TimeSpan.Zero < diff && diff < TimeSpan.FromSeconds(2);
+            return TimeSpan.Zero < diff && diff < TimeSpan.FromSeconds(5);
         }
     }
 }
