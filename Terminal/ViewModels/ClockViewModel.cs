@@ -10,7 +10,8 @@ namespace Terminal.ViewModels
         private int _battery = 100;
         private bool _ambientModeEnabled = false;
         private int _totalSteps = 0;
-        private int _totalStepsAtMidnight = 0;
+        private int _totalStepsAtLastReset = 0;
+        private DateTime _lastResetTime = DateTime.Now;
 
         public ClockViewModel()
         {
@@ -25,11 +26,7 @@ namespace Terminal.ViewModels
             {
                 if (_time == value) return;
                 _time = value;
-                if (AtMidnight(_time.TimeOfDay))
-                {
-                    _totalStepsAtMidnight = _totalSteps;
-                    OnPropertyChanged(nameof(Steps));
-                }
+                HandleStepReset(value);
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(WatchTime));
             }
@@ -64,7 +61,7 @@ namespace Terminal.ViewModels
 
         public int Steps
         {
-            get => _totalSteps - _totalStepsAtMidnight;
+            get => _totalSteps - _totalStepsAtLastReset;
             set
             {
                 if (_totalSteps == value) return;
@@ -78,11 +75,12 @@ namespace Terminal.ViewModels
             Steps = e.Steps;
         }
 
-        private bool AtMidnight(TimeSpan timeOfDay)
+        private void HandleStepReset(DateTime currentTime)
         {
-            var midnight = DateTime.Today.TimeOfDay;
-            var diff = timeOfDay - midnight;
-            return TimeSpan.Zero < diff && diff < TimeSpan.FromSeconds(5);
+            if (currentTime.Date == _lastResetTime.Date) return;
+            _lastResetTime = currentTime;
+            _totalStepsAtLastReset = _totalSteps;
+            OnPropertyChanged(nameof(Steps));
         }
     }
 }
