@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Terminal.Models;
+using Tizen;
 using Tizen.Security;
 
 namespace Terminal.Services
 {
     public class PrivilegeManager
     {
+        private const string PRIVILEGE_ALARM_SET = "http://tizen.org/privilege/alarm.set";
         private const string PRIVILEGE_HEALTHINFO = "http://tizen.org/privilege/healthinfo";
-        
+        private const string PRIVILEGE_LOCATION = "http://tizen.org/privilege/location";
+        private const string PRIVILEGE_INTERNET = "http://tizen.org/privilege/internet";
+        private const string PRIVILEGE_NETWORK_GET = "http://tizen.org/privilege/network.get";
+
         private static PrivilegeManager _instance;
         public static PrivilegeManager Instance
         {
@@ -19,7 +24,11 @@ namespace Terminal.Services
         public event EventHandler PrivilegesChecked;
         private readonly IList<PrivilegeItem> _privilegeItems = new List<PrivilegeItem>()
         {
-            new PrivilegeItem(PRIVILEGE_HEALTHINFO)
+            new PrivilegeItem(PRIVILEGE_ALARM_SET),
+            new PrivilegeItem(PRIVILEGE_HEALTHINFO),
+            new PrivilegeItem(PRIVILEGE_LOCATION),
+            new PrivilegeItem(PRIVILEGE_INTERNET),
+            new PrivilegeItem(PRIVILEGE_NETWORK_GET)
         };
 
         private PrivilegeManager()
@@ -36,12 +45,16 @@ namespace Terminal.Services
 
         public bool AllPermissionsGranted()
         {
-            return _privilegeItems.All(item => item.Granted);
+            var allGranted = _privilegeItems.All(item => item.Granted);
+            Log.Info(Constants.LogTag, $"All permissions granted: {allGranted}");
+            return allGranted;
         }
 
         private bool AllPermissionsChecked()
         {
-            return _privilegeItems.All(item => item.Checked);
+            var allChecked = _privilegeItems.All(item => item.Checked);
+            Log.Info(Constants.LogTag, $"All permissions checked: {allChecked}");
+            return allChecked;
         }
 
         private void AllPrivilegesChecked()

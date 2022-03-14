@@ -12,11 +12,15 @@ namespace Terminal.ViewModels
         private int _totalSteps = 0;
         private int _totalStepsAtLastReset = 0;
         private DateTime _lastResetTime = DateTime.Now;
+        private string _weather = string.Empty;
 
         public ClockViewModel()
         {
-            PedometerService service = PedometerService.Instance;
-            service.PedometerUpdated += Service_PedometerUpdated;
+            var pedometerService = PedometerService.Instance;
+            pedometerService.PedometerUpdated += Service_PedometerUpdated;
+
+            var weatherService = WeatherService.Instance;
+            weatherService.WeatherUpdated += Service_WeatherUpdated;
         }
 
         public DateTime Time
@@ -35,6 +39,17 @@ namespace Terminal.ViewModels
         public string WatchTime
         {
             get => _time.ToString(AmbientModeEnabled ? "hh\\:mm tt" : "hh\\:mm\\:ss tt");
+        }
+
+        public string Weather
+        {
+            get => _weather;
+            set
+            {
+                if (_weather == value) return;
+                _weather = value;
+                OnPropertyChanged();
+            }
         }
 
         public int Battery
@@ -73,6 +88,11 @@ namespace Terminal.ViewModels
         private void Service_PedometerUpdated(object sender, PedometerUpdatedEventArgs e)
         {
             Steps = e.Steps;
+        }
+
+        private void Service_WeatherUpdated(object sender, WeatherUpdatedEventArgs e)
+        {
+            Weather = $"{e.MaxFarenheit}°F / {e.MinFarenheit}°F";
         }
 
         private void HandleStepReset(DateTime currentTime)
