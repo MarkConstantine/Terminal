@@ -92,7 +92,7 @@ namespace Terminal.ViewModels
 
         private void Service_WeatherUpdated(object sender, WeatherUpdatedEventArgs e)
         {
-            Weather = $"{e.MaxFarenheit}°F / {e.MinFarenheit}°F";
+            Weather = $"{e.CurrentTemperature}°{e.TemperatureUnit}";
         }
 
         private void HandleStepReset(DateTime currentTime)
