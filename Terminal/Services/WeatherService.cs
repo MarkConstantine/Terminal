@@ -22,10 +22,6 @@ namespace Terminal.Services
         private readonly LocationService _locationService;
         private readonly HttpClient _client;
 
-        private DateTime _updateTime;
-        private Location _lastLocation;
-        private List<WeatherGovForecastPeriod> _hourlyForecast;
-
         private WeatherService()
         {
             _locationService = LocationService.Instance;
@@ -40,26 +36,35 @@ namespace Terminal.Services
             {
                 try
                 {
-                    await GetTemperatureAsync();
+                    var hourForecast = await GetTemperatureAsync();
+                    WeatherUpdated.Invoke(this, new WeatherUpdatedEventArgs
+                    {
+                        CurrentTemperature = hourForecast.Temperature,
+                        TemperatureUnit = hourForecast.TemperatureUnit,
+                    });
+                    Log.Info(Constants.LogTag, $"Weather updated {hourForecast.Temperature}{hourForecast.TemperatureUnit}");
+                    await Task.Delay(TimeSpan.FromHours(1));
                 }
                 catch (Exception ex)
                 {
                     Log.Error(Constants.LogTag, $"Exception in {nameof(WeatherThread)}: {ex}");
+                    await Task.Delay(TimeSpan.FromMinutes(1));
                 }
-
-                await Task.Delay(TimeSpan.FromHours(1));
             }
         }
 
         private async Task<Uri> GetForecastUriAsync(Location location)
         {
             var requestUri = new Uri($"https://api.weather.gov/points/{location.Latitude},{location.Longitude}");
-            
+
             var httpResponse = await _client.GetAsync(requestUri);
             httpResponse.EnsureSuccessStatusCode();
 
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+
             var pointResponse = JsonConvert.DeserializeObject<WeatherGovPointResponse>(jsonResponse);
+            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(httpResponse.Headers));
+            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(pointResponse));
 
             var forecastUri = pointResponse.Properties.ForecastHourlyUri;
             Log.Info(Constants.LogTag, $"Forecast URI from weather.gov: {forecastUri}");
@@ -72,43 +77,24 @@ namespace Terminal.Services
             httpResponse.EnsureSuccessStatusCode();
 
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+
             var forecastResponse = JsonConvert.DeserializeObject<WeatherGovForecastResponse>(jsonResponse);
+            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(httpResponse.Headers));
+            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(forecastResponse, Formatting.None));
 
             var periods = forecastResponse?.Properties?.Periods;
             Log.Info(Constants.LogTag, $"Received {periods.Count} forecast period(s) between {periods.First().StartTime} and {periods.Last().EndTime}");
             return periods;
         }
 
-        private async Task GetTemperatureAsync()
+        private async Task<WeatherGovForecastPeriod> GetTemperatureAsync()
         {
-            // Cache forecast data to improve battery life.
-            var now = DateTime.Now;
             var currentLocation = _locationService.GetLocation();
+            var forecastUri = await GetForecastUriAsync(currentLocation);
+            var hourlyForecast = await GetForecastAsync(forecastUri);
 
-            if (_updateTime.Date != now.Date || _hourlyForecast == null || _lastLocation != currentLocation)
-            {
-                // To update cache.
-                var forecastUri = await GetForecastUriAsync(currentLocation);
-                _hourlyForecast = await GetForecastAsync(forecastUri);
-                _lastLocation = currentLocation;
-                _updateTime = DateTime.UtcNow;
-            }
-
-            // Use cache.
-            var hourForecast = _hourlyForecast.Where(period => period.StartTime <= now && now <= period.EndTime).FirstOrDefault();
-            if (hourForecast == null)
-            {
-                // Cache miss invalidate cache.
-                _updateTime = DateTime.MinValue; 
-            }
-            else
-            {
-                WeatherUpdated.Invoke(this, new WeatherUpdatedEventArgs
-                {
-                    CurrentTemperature = hourForecast.Temperature,
-                    TemperatureUnit = hourForecast.TemperatureUnit,
-                });
-            }
+            var now = DateTime.Now;
+            return hourlyForecast.First(period => period.StartTime <= now && now <= period.EndTime);
         }
 
         private class WeatherGovPointResponse
