@@ -13,9 +13,12 @@
         <privilege>http://tizen.org/privilege/location</privilege>
         <privilege>http://tizen.org/privilege/alarm.set</privilege>
         <privilege>http://tizen.org/privilege/healthinfo</privilege>
+        <privilege>http://tizen.org/privilege/internet</privilege>
+        <privilege>http://tizen.org/privilege/network.get</privilege>
     </privileges>
     <dependencies />
     <provides-appdefined-privileges />
     <feature name="http://tizen.org/feature/location">true</feature>
     <feature name="http://tizen.org/feature/battery">true</feature>
+    <feature name="http://tizen.org/feature/network.wifi">true</feature>
 </manifest>

@@ -18,9 +18,9 @@
                 <Label x:Name="TimeLabel"
                        Text="{Binding WatchTime, StringFormat='time     : {0}'}" />
                 <Label x:Name="DateLabel"
-                       Text="{Binding Time, StringFormat='date     : {0:d}'}" />
-                <Label x:Name="DayLabel"
-                       Text="{Binding Time, StringFormat='day      : {0:dddd}'}" />
+                       Text="{Binding Time, StringFormat='date     : {0:ddd} {0:d}'}" />
+                <Label x:Name="WeatherLabel"
+                       Text="{Binding Weather, StringFormat='weather  : {0}'}" />
                 <Label x:Name="BatteryLabel"
                        Text="{Binding Battery, StringFormat='battery  : {0}%'}" />
                 <Label x:Name="StepsLabel"

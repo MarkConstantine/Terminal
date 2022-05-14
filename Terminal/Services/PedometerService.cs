@@ -1,5 +1,6 @@
 ﻿using System;
 using Terminal.Models;
+using Tizen;
 using Tizen.Sensor;
 
 namespace Terminal.Services
@@ -9,14 +10,7 @@ namespace Terminal.Services
         private static PedometerService _instance;
         public static PedometerService Instance
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new PedometerService();
-                }
-                return _instance;
-            }
+            get => _instance ?? (_instance = new PedometerService());
         }
 
         public event EventHandler<PedometerUpdatedEventArgs> PedometerUpdated;
@@ -55,6 +49,7 @@ namespace Terminal.Services
             _pedometer.Stop();
             _pedometer.DataUpdated -= Pedometer_DataUpdated;
             _pedometer.Dispose();
+            Log.Info(Constants.LogTag, $"{nameof(PedometerService)} Terminated");
         }
     }
 }
