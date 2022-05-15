@@ -7,6 +7,7 @@ using Tizen.System;
 using Tizen.Wearable.CircularUI.Forms;
 using Tizen.Wearable.CircularUI.Forms.Renderer.Watchface;
 using Xamarin.Forms;
+using Tizen;
 
 namespace Terminal
 {
@@ -89,6 +90,7 @@ namespace Terminal
 
         public static void Main(string[] args)
         {
+            Log.Info(Constants.LogTag, "PROGRAM START");
             var app = new Program();
             Forms.Init(app);
             FormsCircularUI.Init();
