@@ -13,14 +13,13 @@ namespace Terminal.ViewModels
         private int _totalStepsAtLastReset = 0;
         private DateTime _lastResetTime = DateTime.Now;
         private string _weather = string.Empty;
+        private string _bitcoinPrice = string.Empty;
 
         public ClockViewModel()
         {
-            var pedometerService = PedometerService.Instance;
-            pedometerService.PedometerUpdated += Service_PedometerUpdated;
-
-            var weatherService = WeatherService.Instance;
-            weatherService.WeatherUpdated += Service_WeatherUpdated;
+            PedometerService.Instance.PedometerUpdated += Service_PedometerUpdated;
+            WeatherService.Instance.WeatherUpdated += Service_WeatherUpdated;
+            BitcoinService.Instance.PriceUpdated += Service_PriceUpdated;
         }
 
         public DateTime Time
@@ -85,6 +84,17 @@ namespace Terminal.ViewModels
             }
         }
 
+        public string BitcoinPrice
+        {
+            get => _bitcoinPrice;
+            set
+            {
+                if (_bitcoinPrice == value) return;
+                _bitcoinPrice = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void Service_PedometerUpdated(object sender, PedometerUpdatedEventArgs e)
         {
             Steps = e.Steps;
@@ -93,6 +103,11 @@ namespace Terminal.ViewModels
         private void Service_WeatherUpdated(object sender, WeatherUpdatedEventArgs e)
         {
             Weather = $"{e.CurrentTemperature}°{e.TemperatureUnit}";
+        }
+
+        private void Service_PriceUpdated(object sender, BitcoinPriceUpdatedEventArgs e)
+        {
+            BitcoinPrice = $"{e.Price:c}";
         }
 
         private void HandleStepReset(DateTime currentTime)
