@@ -11,7 +11,7 @@ namespace Terminal.ViewModels
         private bool _ambientModeEnabled = false;
         private int _totalSteps = 0;
         private int _totalStepsAtLastReset = 0;
-        private DateTime _lastResetTime = DateTime.Now;
+        private DateTime _lastResetTime = DateTime.MinValue;
         private string _weather = string.Empty;
         private string _bitcoinPrice = string.Empty;
 
@@ -102,7 +102,7 @@ namespace Terminal.ViewModels
 
         private void Service_WeatherUpdated(object sender, WeatherUpdatedEventArgs e)
         {
-            Weather = $"{e.CurrentTemperature}°{e.TemperatureUnit}";
+            Weather = $"{e.CurrentTemperature}Â°{e.TemperatureUnit}";
         }
 
         private void Service_PriceUpdated(object sender, BitcoinPriceUpdatedEventArgs e)
