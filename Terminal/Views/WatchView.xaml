@@ -19,14 +19,16 @@
                        Text="{Binding WatchTime, StringFormat='time    : {0}'}" />
                 <Label x:Name="DateLabel"
                        Text="{Binding Time, StringFormat='date    : {0:ddd} {0:MM}/{0:dd}'}" />
-                <Label x:Name="WeatherLabel"
-                       Text="{Binding Weather, StringFormat='weather : {0}'}" />
                 <Label x:Name="BatteryLabel"
                        Text="{Binding Battery, StringFormat='battery : {0}%'}" />
                 <Label x:Name="StepsLabel"
                        Text="{Binding Steps, StringFormat='steps   : {0}'}" />
+                <Label x:Name="WeatherLabel"
+                       Text="{Binding Weather, StringFormat='weather : {0}'}"
+                       IsVisible="{Binding WeatherVisible}" />
                 <Label x:Name="BitcoinLabel"
-                       Text="{Binding BitcoinPrice, StringFormat='btc     : {0}'}" />
+                       Text="{Binding BitcoinPrice, StringFormat='btc     : {0}'}"
+                       IsVisible="{Binding BitcoinPriceVisible} "/>
             </StackLayout>
         </ContentPage>
     </Application.MainPage>

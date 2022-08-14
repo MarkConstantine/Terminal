@@ -40,6 +40,7 @@ namespace Terminal.ViewModels
             get => _time.ToString(AmbientModeEnabled ? "hh\\:mm tt" : "hh\\:mm\\:ss tt");
         }
 
+        public bool WeatherVisible => !string.IsNullOrEmpty(_weather);
         public string Weather
         {
             get => _weather;
@@ -48,6 +49,7 @@ namespace Terminal.ViewModels
                 if (_weather == value) return;
                 _weather = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(WeatherVisible));
             }
         }
 
@@ -84,6 +86,7 @@ namespace Terminal.ViewModels
             }
         }
 
+        public bool BitcoinPriceVisible => !string.IsNullOrEmpty(_bitcoinPrice);
         public string BitcoinPrice
         {
             get => _bitcoinPrice;
@@ -92,6 +95,7 @@ namespace Terminal.ViewModels
                 if (_bitcoinPrice == value) return;
                 _bitcoinPrice = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(BitcoinPriceVisible));
             }
         }
 
