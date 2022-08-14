@@ -9,26 +9,50 @@
             <Setter Property="FontSize"
                     Value="8" />
         </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily"
+                    Value="ClassicConsoleNeue" />
+            <Setter Property="FontSize"
+                    Value="8" />
+            <Setter Property="FontAttributes"
+                    Value="Bold" />
+            <Setter Property="BackgroundColor"
+                    Value="Transparent" />
+            <Setter Property="Margin"
+                    Value="10" />
+            <Setter Property="Padding"
+                    Value="10" />
+            <Setter Property="HeightRequest"
+                    Value="20" />
+        </Style>
     </Application.Resources>
     <Application.MainPage>
         <ContentPage>
             <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
                 <Label x:Name="TopLabel"
-                       Text="C:\>watch" />
+                        Text="C:\>watch" />
                 <Label x:Name="TimeLabel"
-                       Text="{Binding WatchTime, StringFormat='time    : {0}'}" />
+                       Text="{Binding WatchTime, StringFormat='time    : {0}'}"
+                       IsVisible="{Binding WatchTimeVisible}" />
                 <Label x:Name="DateLabel"
-                       Text="{Binding Time, StringFormat='date    : {0:ddd} {0:MM}/{0:dd}'}" />
+                       Text="{Binding WatchDate, StringFormat='date    : {0}'}"
+                       IsVisible="{Binding WatchDateVisible}" />
                 <Label x:Name="BatteryLabel"
-                       Text="{Binding Battery, StringFormat='battery : {0}%'}" />
+                       Text="{Binding Battery, StringFormat='battery : {0}%'}"
+                       IsVisible="{Binding BatteryVisible} "/>
                 <Label x:Name="StepsLabel"
-                       Text="{Binding Steps, StringFormat='steps   : {0}'}" />
+                       Text="{Binding Steps, StringFormat='steps   : {0}'}"
+                       IsVisible="{Binding StepsVisible} "/>
                 <Label x:Name="WeatherLabel"
                        Text="{Binding Weather, StringFormat='weather : {0}'}"
                        IsVisible="{Binding WeatherVisible}" />
                 <Label x:Name="BitcoinLabel"
                        Text="{Binding BitcoinPrice, StringFormat='btc     : {0}'}"
                        IsVisible="{Binding BitcoinPriceVisible} "/>
+                <Button Text="[REFRESH]"
+                        HorizontalOptions="Center"
+                        Command="{Binding RefreshCommand}"
+                        CommandParameter="{Binding CurrentRefreshing} "/>
             </StackLayout>
         </ContentPage>
     </Application.MainPage>

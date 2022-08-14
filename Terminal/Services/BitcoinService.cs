@@ -18,6 +18,16 @@ namespace Terminal.Services
         public event EventHandler<BitcoinPriceUpdatedEventArgs> PriceUpdated;
         private readonly HttpClient _client;
 
+        public async Task UpdatePrice()
+        {
+            var price = await GetPrice();
+            PriceUpdated.Invoke(this, new BitcoinPriceUpdatedEventArgs
+            {
+                Price = decimal.Parse(price.PriceUsd),
+                ChangePercent24Hr = decimal.Parse(price.ChangePercent24Hr)
+            });
+        }
+
         private BitcoinService()
         {
             _client = new HttpClient();
@@ -30,12 +40,7 @@ namespace Terminal.Services
             {
                 try
                 {
-                    var price = await GetPrice();
-                    PriceUpdated.Invoke(this, new BitcoinPriceUpdatedEventArgs
-                    {
-                        Price = decimal.Parse(price.PriceUsd),
-                        ChangePercent24Hr = decimal.Parse(price.ChangePercent24Hr)
-                    });
+                    await UpdatePrice();
                     await Task.Delay(TimeSpan.FromHours(1));
                 }
                 catch (Exception ex)

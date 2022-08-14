@@ -22,6 +22,17 @@ namespace Terminal.Services
         private readonly LocationService _locationService;
         private readonly HttpClient _client;
 
+        public async Task UpdateWeather()
+        {
+            var hourForecast = await GetTemperatureAsync();
+            WeatherUpdated.Invoke(this, new WeatherUpdatedEventArgs
+            {
+                CurrentTemperature = hourForecast.Temperature,
+                TemperatureUnit = hourForecast.TemperatureUnit,
+            });
+            Log.Info(Constants.LogTag, $"Weather updated {hourForecast.Temperature}{hourForecast.TemperatureUnit}");
+        }
+
         private WeatherService()
         {
             _locationService = LocationService.Instance;
@@ -36,13 +47,7 @@ namespace Terminal.Services
             {
                 try
                 {
-                    var hourForecast = await GetTemperatureAsync();
-                    WeatherUpdated.Invoke(this, new WeatherUpdatedEventArgs
-                    {
-                        CurrentTemperature = hourForecast.Temperature,
-                        TemperatureUnit = hourForecast.TemperatureUnit,
-                    });
-                    Log.Info(Constants.LogTag, $"Weather updated {hourForecast.Temperature}{hourForecast.TemperatureUnit}");
+                    await UpdateWeather();
                     await Task.Delay(TimeSpan.FromHours(1));
                 }
                 catch (Exception ex)
