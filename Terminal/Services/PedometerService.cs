@@ -1,6 +1,5 @@
 ﻿using System;
 using Terminal.Models;
-using Tizen;
 using Tizen.Sensor;
 
 namespace Terminal.Services
@@ -49,7 +48,7 @@ namespace Terminal.Services
             _pedometer.Stop();
             _pedometer.DataUpdated -= Pedometer_DataUpdated;
             _pedometer.Dispose();
-            Log.Info(Constants.LogTag, $"{nameof(PedometerService)} Terminated");
+            Logger.Log($"{nameof(PedometerService)} Terminated");
         }
     }
 }

@@ -90,7 +90,7 @@ namespace Terminal
 
         public static void Main(string[] args)
         {
-            Log.Info(Constants.LogTag, "PROGRAM START");
+            Logger.Log("PROGRAM START");
             var app = new Program();
             Forms.Init(app);
             FormsCircularUI.Init();

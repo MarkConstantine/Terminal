@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Terminal.Models;
-using Tizen;
 
 namespace Terminal.Services
 {
@@ -41,13 +40,12 @@ namespace Terminal.Services
                 try
                 {
                     await UpdatePrice();
-                    await Task.Delay(TimeSpan.FromHours(1));
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(Constants.LogTag, $"Exception in {nameof(PriceThread)}: {ex}");
-                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    Logger.Log($"Exception in {nameof(PriceThread)}: {ex}");
                 }
+                await Task.Delay(TimeSpan.FromHours(1));
             }
         }
 
@@ -61,9 +59,9 @@ namespace Terminal.Services
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
 
             var assetResponse = JsonConvert.DeserializeObject<CoinCapAssetResponse>(jsonResponse);
-            Log.Info(Constants.LogTag, $"{requestUri} {httpResponse.StatusCode} [{assetResponse.Data.PriceUsd}, {assetResponse.Data.ChangePercent24Hr}%]");
-            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(httpResponse.Headers));
-            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(assetResponse));
+            Logger.Log($"{requestUri} {httpResponse.StatusCode} [{assetResponse.Data.PriceUsd}, {assetResponse.Data.ChangePercent24Hr}%]");
+            Logger.Log(JsonConvert.SerializeObject(httpResponse.Headers));
+            Logger.Log(JsonConvert.SerializeObject(assetResponse));
 
             return assetResponse.Data;
         }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Terminal.Models;
 using Tizen.Location;
-using Tizen;
 
 namespace Terminal.Services
 {
@@ -30,7 +29,7 @@ namespace Terminal.Services
                 CurrentTemperature = hourForecast.Temperature,
                 TemperatureUnit = hourForecast.TemperatureUnit,
             });
-            Log.Info(Constants.LogTag, $"Weather updated {hourForecast.Temperature}{hourForecast.TemperatureUnit}");
+            Logger.Log($"Weather updated {hourForecast.Temperature}{hourForecast.TemperatureUnit}");
         }
 
         private WeatherService()
@@ -48,13 +47,12 @@ namespace Terminal.Services
                 try
                 {
                     await UpdateWeather();
-                    await Task.Delay(TimeSpan.FromHours(1));
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(Constants.LogTag, $"Exception in {nameof(WeatherThread)}: {ex}");
-                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    Logger.Log($"Exception in {nameof(WeatherThread)}: {ex}");
                 }
+                await Task.Delay(TimeSpan.FromHours(1));
             }
         }
 
@@ -68,11 +66,11 @@ namespace Terminal.Services
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
 
             var pointResponse = JsonConvert.DeserializeObject<WeatherGovPointResponse>(jsonResponse);
-            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(httpResponse.Headers));
-            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(pointResponse));
+            Logger.Log(JsonConvert.SerializeObject(httpResponse.Headers));
+            Logger.Log(JsonConvert.SerializeObject(pointResponse));
 
             var forecastUri = pointResponse.Properties.ForecastHourlyUri;
-            Log.Info(Constants.LogTag, $"Forecast URI from weather.gov: {forecastUri}");
+            Logger.Log($"Forecast URI from weather.gov: {forecastUri}");
             return new Uri(forecastUri);
         }
 
@@ -84,11 +82,11 @@ namespace Terminal.Services
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
 
             var forecastResponse = JsonConvert.DeserializeObject<WeatherGovForecastResponse>(jsonResponse);
-            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(httpResponse.Headers));
-            Log.Debug(Constants.LogTag, JsonConvert.SerializeObject(forecastResponse, Formatting.None));
+            Logger.Log(JsonConvert.SerializeObject(httpResponse.Headers));
+            Logger.Log(JsonConvert.SerializeObject(forecastResponse, Formatting.None));
 
             var periods = forecastResponse?.Properties?.Periods;
-            Log.Info(Constants.LogTag, $"Received {periods.Count} forecast period(s) between {periods.First().StartTime} and {periods.Last().EndTime}");
+            Logger.Log($"Received {periods.Count} forecast period(s) between {periods.First().StartTime} and {periods.Last().EndTime}");
             return periods;
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using Tizen.Location;
-using static Tizen.Log;
 
 namespace Terminal.Services
 {
@@ -32,7 +31,7 @@ namespace Terminal.Services
         {
             _locator.Stop();
             _locator.Dispose();
-            Info(Constants.LogTag, $"{nameof(LocationService)} Terminated");
+            Logger.Log($"{nameof(LocationService)} Terminated");
         }
     }
 }

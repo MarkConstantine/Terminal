@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Terminal.Models;
-using Tizen;
 using Tizen.Security;
 
 namespace Terminal.Services
@@ -46,14 +45,14 @@ namespace Terminal.Services
         public bool AllPermissionsGranted()
         {
             var allGranted = _privilegeItems.All(item => item.Granted);
-            Log.Info(Constants.LogTag, $"All permissions granted: {allGranted}");
+            Logger.Log($"All permissions granted: {allGranted}");
             return allGranted;
         }
 
         private bool AllPermissionsChecked()
         {
             var allChecked = _privilegeItems.All(item => item.Checked);
-            Log.Info(Constants.LogTag, $"All permissions checked: {allChecked}");
+            Logger.Log($"All permissions checked: {allChecked}");
             return allChecked;
         }
 

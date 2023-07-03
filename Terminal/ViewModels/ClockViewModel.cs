@@ -235,7 +235,7 @@ namespace Terminal.ViewModels
             }
             catch (Exception ex)
             {
-                Log.Error(Constants.LogTag, $"Refresh Exception: {ex}");
+                Logger.Log(Constants.LogTag, $"Refresh Exception: {ex}");
             }
 
             CurrentlyRefreshing = false;
